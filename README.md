@@ -14,6 +14,7 @@ It can be used directly in a browser, without creating an account or installing 
 
 <p align="center">
   <img src="assets/screenshots/main-screen.jpg" alt="Essential Breathing main screen with breathing gauge" width="260">
+   &nbsp;&nbsp;&nbsp;
   <img src="assets/screenshots/settings-screen.jpg" alt="Essential Breathing settings screen" width="260">
 </p>
 
