@@ -9,17 +9,23 @@
    * application: one calm screen, one breathing guide, a few settings.
    */
 
+  // Saved preferences are versioned so future incompatible formats can use a new key.
   const STORAGE_KEY = "essentialBreathingWeb.settings.v1";
 
+  // User-adjustable breathing durations, expressed in seconds.
   const DURATION_STEP = 0.5;
   const MINIMUM_DURATION = 1.0;
   const MAXIMUM_DURATION = 20.0;
   const MINIMUM_SESSION_DURATION_MINUTES = 1;
   const MAXIMUM_SESSION_DURATION_MINUTES = 60;
 
+  // The SVG ball moves between these two Y coordinates.
+  // Keeping them in JavaScript makes the animation independent from CSS layout.
   const GAUGE_TOP_Y = 50;
   const GAUGE_BOTTOM_Y = 470;
 
+  // Small explicit state machine for the main screen.
+  // COMPLETING is used only while the end-of-session overlay is displayed.
   const SessionState = Object.freeze({
     IDLE: "idle",
     RUNNING: "running",
@@ -27,11 +33,13 @@
     COMPLETING: "completing",
   });
 
+  // The cycle alternates between inhale and exhale.
   const BreathingPhase = Object.freeze({
     INHALE: "inhale",
     EXHALE: "exhale",
   });
 
+  // Theme data mirrors the simple color themes from the Godot version.
   const themes = [
     {
       nameKey: "THEME_OCEAN",
@@ -67,6 +75,7 @@
     },
   ];
 
+  // Tiny built-in dictionary: no external i18n library is needed for this app.
   const translations = {
     en: {
       SETTINGS_TITLE: "Settings",
@@ -112,6 +121,7 @@
     },
   };
 
+  // Cache all DOM nodes once. If an id changes in index.html, it should be updated here too.
   const elements = {
     mainScreen: document.querySelector("#main-screen"),
     settingsScreen: document.querySelector("#settings-screen"),
@@ -146,6 +156,7 @@
     themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   };
 
+  // Runtime state. All time counters are expressed in seconds.
   const language = detectLanguage();
 
   let settings = loadSettings();
@@ -160,6 +171,9 @@
 
   initialize();
 
+  /**
+   * Applies the initial UI state and wires browser events.
+   */
   function initialize() {
     applyLocalization();
     applyTheme();
@@ -168,6 +182,9 @@
     bindEvents();
   }
 
+  /**
+   * Connects UI controls to the small state machine and settings model.
+   */
   function bindEvents() {
     elements.settingsButton.addEventListener("click", showSettingsScreen);
     elements.backButton.addEventListener("click", showMainScreen);
@@ -199,6 +216,9 @@
     });
   }
 
+  /**
+   * Starts a new session from idle, or resumes an existing paused session.
+   */
   function startOrResumeSession() {
     if (sessionState === SessionState.IDLE) {
       breathingPhase = BreathingPhase.INHALE;
@@ -217,6 +237,10 @@
     }
   }
 
+  /**
+   * Pauses only when the animation is running.
+   * The transparent full-screen touch area calls this function.
+   */
   function pauseSession() {
     if (sessionState !== SessionState.RUNNING) {
       return;
@@ -234,6 +258,9 @@
     resetSession();
   }
 
+  /**
+   * Returns the main screen to the same visual state as a fresh page load.
+   */
   function resetSession() {
     cancelAnimationFrameIfNeeded();
     sessionState = SessionState.IDLE;
@@ -247,6 +274,10 @@
     updateMainControls();
   }
 
+  /**
+   * Main animation loop, driven by requestAnimationFrame.
+   * The delta is capped to avoid a large jump after tab throttling or device sleep.
+   */
   function updateSessionFrame(timestamp) {
     if (sessionState !== SessionState.RUNNING) {
       return;
@@ -276,6 +307,11 @@
     }
   }
 
+  /**
+   * Switches phase when the current inhale/exhale duration is finished.
+   * Once the session duration has been reached, the app waits for the current
+   * exhale to complete before showing the completion overlay.
+   */
   function advanceBreathingCycleIfNeeded() {
     let currentPhaseDuration = getCurrentPhaseDuration();
 
@@ -295,6 +331,10 @@
     }
   }
 
+  /**
+   * Converts the current phase progress into a vertical SVG ball position.
+   * Inhale moves upward; exhale mirrors the same eased motion downward.
+   */
   function updateGaugeForCurrentPhase() {
     const rawProgress = clampNumber(phaseElapsed / getCurrentPhaseDuration(), 0, 1);
     const easedProgress = smootherstep(rawProgress);
@@ -305,6 +345,9 @@
     setGaugeProgress(visualProgress);
   }
 
+  /**
+   * Displays a simple full-screen transition at the end of a session.
+   */
   async function completeSession() {
     sessionState = SessionState.COMPLETING;
     cancelAnimationFrameIfNeeded();
@@ -326,6 +369,9 @@
     elements.completionOverlay.setAttribute("aria-hidden", "true");
   }
 
+  /**
+   * Shows only the controls that make sense for the current session state.
+   */
   function updateMainControls() {
     const isIdle = sessionState === SessionState.IDLE;
     const isRunning = sessionState === SessionState.RUNNING;
@@ -347,6 +393,9 @@
     elements.sessionProgressFill.style.width = `${clampNumber(progressPercent, 0, 100)}%`;
   }
 
+  /**
+   * The settings screen is only meant to edit idle sessions.
+   */
   function showSettingsScreen() {
     if (sessionState !== SessionState.IDLE) {
       releaseWakeLock();
@@ -375,6 +424,9 @@
     persistSettingsAndRefresh();
   }
 
+  /**
+   * Central save point for every user preference change.
+   */
   function persistSettingsAndRefresh() {
     saveSettings(settings);
     applyTheme();
@@ -382,6 +434,9 @@
     updatePauseDisplay();
   }
 
+  /**
+   * Renders the current settings model into the form controls.
+   */
   function updateSettingsScreen() {
     elements.inhaleValue.textContent = `${settings.inhaleDuration.toFixed(1)}s`;
     elements.exhaleValue.textContent = `${settings.exhaleDuration.toFixed(1)}s`;
@@ -390,6 +445,9 @@
     elements.themeName.textContent = translate(themes[settings.themeIndex].nameKey);
   }
 
+  /**
+   * Publishes theme colors as CSS variables so CSS owns the actual rendering.
+   */
   function applyTheme() {
     const theme = themes[settings.themeIndex];
     const root = document.documentElement;
@@ -404,6 +462,9 @@
     }
   }
 
+  /**
+   * Applies static UI labels for the detected browser language.
+   */
   function applyLocalization() {
     document.documentElement.lang = language;
 
@@ -417,6 +478,9 @@
     elements.completionMessage.textContent = translate("SESSION_COMPLETED");
   }
 
+  /**
+   * Moves the SVG circle. Progress 0 is bottom, progress 1 is top.
+   */
   function setGaugeProgress(progress) {
     const clampedProgress = clampNumber(progress, 0, 1);
     const y = interpolate(GAUGE_BOTTOM_Y, GAUGE_TOP_Y, clampedProgress);
@@ -433,6 +497,10 @@
     return settings.sessionDurationMinutes * 60;
   }
 
+  /**
+   * Loads settings from localStorage and falls back safely if the saved value
+   * is missing, corrupted, or from an older incompatible version.
+   */
   function loadSettings() {
     const defaults = {
       inhaleDuration: 4.0,
@@ -455,6 +523,9 @@
     }
   }
 
+  /**
+   * Sanitizes settings coming from storage or UI controls.
+   */
   function normalizeSettings(value) {
     return {
       inhaleDuration: clampNumber(Number(value.inhaleDuration), MINIMUM_DURATION, MAXIMUM_DURATION),
@@ -476,6 +547,9 @@
     }
   }
 
+  /**
+   * Keeps the screen awake during a breathing session when the browser allows it.
+   */
   async function requestWakeLock() {
     if (!("wakeLock" in navigator) || wakeLock !== null) {
       return;
@@ -543,6 +617,10 @@
     return "en";
   }
 
+  /**
+   * Smooth interpolation curve used by the Godot version too.
+   * It eases in and out without changing the total phase duration.
+   */
   function smootherstep(value) {
     const t = clampNumber(value, 0, 1);
     return t * t * t * (t * (t * 6 - 15) + 10);
