@@ -4,6 +4,12 @@ A lightweight web version of **Essential Breathing**.
 
 This version is built with plain HTML, CSS and JavaScript. It uses an inline SVG breathing gauge, browser `localStorage` for settings, and no framework or build step.
 
+## Live version
+
+The web app is available here:
+
+https://egofree71.github.io/EssentialBreathingWeb/
+
 ## Features
 
 - Simple visual breathing guide
