@@ -5,7 +5,7 @@
  * without a network connection after the first successful online visit.
  */
 
-const CACHE_VERSION = "v1.0.1";
+const CACHE_VERSION = "v1.0.2";
 const CACHE_NAME = `essential-breathing-web-${CACHE_VERSION}`;
 
 const APP_SHELL_FILES = [
@@ -13,7 +13,7 @@ const APP_SHELL_FILES = [
   "./index.html",
   "./style.css",
   "./app.js",
-  "./manifest.webmanifest",
+  "./manifest.webmanifest?v=1.0.2",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
 ];

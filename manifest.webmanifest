@@ -3,6 +3,7 @@
   "name": "Essential Breathing",
   "short_name": "Essential Breathing",
   "description": "A lightweight breathing guide for calm, simple breathing sessions.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
