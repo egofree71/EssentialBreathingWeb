@@ -96,13 +96,10 @@ button {
 }
 
 .settings-button svg {
-  width: 30px;
-  height: 30px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+  stroke: none;
 }
 
 .pause-panel {
@@ -166,14 +163,14 @@ button {
 .bottom-controls {
   grid-row: 3;
   z-index: 3;
-  position: relative;
-  align-self: start;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
   min-height: 86px;
 }
 
 .control-button {
-  position: absolute;
-  top: 0;
   width: 64px;
   height: 64px;
   border-radius: 22px;
@@ -188,17 +185,14 @@ button {
   fill: currentColor;
 }
 
-.start-button {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.start-button:active {
-  transform: translateX(-50%) scale(0.96);
-}
-
+.start-button,
 .stop-button {
-  left: calc(50% - 96px);
+  flex: 0 0 auto;
+}
+
+.start-button:active,
+.stop-button:active {
+  transform: scale(0.96);
 }
 
 .running-touch-area {
@@ -281,7 +275,7 @@ button {
 
 .setting-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(170px, 548px);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
   min-height: 60px;
@@ -295,8 +289,8 @@ button {
 
 .stepper {
   display: grid;
-  grid-template-columns: minmax(48px, 1fr) 74px minmax(48px, 1fr);
-  gap: 12px;
+  grid-template-columns: clamp(54px, 12vw, 112px) 64px clamp(54px, 12vw, 112px);
+  gap: clamp(8px, 1.8vw, 16px);
   align-items: center;
 }
 
@@ -334,7 +328,7 @@ button {
 
 .theme-picker {
   display: grid;
-  grid-template-columns: minmax(74px, 194px) minmax(0, 1fr) minmax(74px, 194px);
+  grid-template-columns: clamp(74px, 18vw, 144px) minmax(0, 1fr) clamp(74px, 18vw, 144px);
   gap: 14px;
   align-items: center;
 }
@@ -402,12 +396,17 @@ button {
 
 @media (max-width: 420px) {
   .setting-row {
-    grid-template-columns: minmax(0, 1fr) minmax(164px, 1.25fr);
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
   }
 
   .stepper {
-    grid-template-columns: minmax(44px, 1fr) 64px minmax(44px, 1fr);
-    gap: 8px;
+    grid-template-columns: 52px 58px 52px;
+    gap: 6px;
+  }
+
+  .stepper button,
+  .theme-picker button {
+    min-height: 46px;
   }
 }
