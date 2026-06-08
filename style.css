@@ -303,7 +303,8 @@ button {
 .theme-picker button {
   min-height: 48px;
   border-radius: 14px;
-  font-size: 1.35rem;
+  font-size: 1.72rem;
+  font-weight: 800;
   line-height: 1;
 }
 
