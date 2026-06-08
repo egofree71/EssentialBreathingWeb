@@ -163,16 +163,18 @@ button {
 .bottom-controls {
   grid-row: 3;
   z-index: 3;
-  display: flex;
-  align-items: flex-start;
+  --control-size: 64px;
+  display: grid;
+  grid-template-columns: var(--control-size) var(--control-size) var(--control-size);
+  column-gap: 16px;
+  align-items: start;
   justify-content: center;
-  gap: 16px;
   min-height: 86px;
 }
 
 .control-button {
-  width: 64px;
-  height: 64px;
+  width: var(--control-size);
+  height: var(--control-size);
   border-radius: 22px;
   display: inline-flex;
   align-items: center;
@@ -180,14 +182,17 @@ button {
 }
 
 .control-button svg {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   fill: currentColor;
 }
 
-.start-button,
 .stop-button {
-  flex: 0 0 auto;
+  grid-column: 1;
+}
+
+.start-button {
+  grid-column: 2;
 }
 
 .start-button:active,
@@ -222,8 +227,8 @@ button {
   grid-template-columns: 48px 1fr;
   gap: 12px;
   align-items: center;
-  width: min(100%, 780px);
-  max-width: 780px;
+  width: min(100%, 430px);
+  max-width: 430px;
   margin: 0 0 34px;
 }
 
@@ -262,8 +267,8 @@ button {
 }
 
 .settings-content {
-  width: min(100%, 780px);
-  max-width: 780px;
+  width: min(100%, 430px);
+  max-width: 430px;
   margin: 0;
 }
 
@@ -289,8 +294,8 @@ button {
 
 .stepper {
   display: grid;
-  grid-template-columns: clamp(54px, 12vw, 112px) 64px clamp(54px, 12vw, 112px);
-  gap: clamp(8px, 1.8vw, 16px);
+  grid-template-columns: clamp(54px, 12vw, 96px) 64px clamp(54px, 12vw, 96px);
+  gap: clamp(8px, 1.8vw, 14px);
   align-items: center;
 }
 
@@ -328,7 +333,7 @@ button {
 
 .theme-picker {
   display: grid;
-  grid-template-columns: clamp(74px, 18vw, 144px) minmax(0, 1fr) clamp(74px, 18vw, 144px);
+  grid-template-columns: clamp(74px, 18vw, 104px) minmax(0, 1fr) clamp(74px, 18vw, 104px);
   gap: 14px;
   align-items: center;
 }
@@ -387,9 +392,8 @@ button {
     height: 54px;
   }
 
-  .control-button {
-    width: 70px;
-    height: 70px;
+  .bottom-controls {
+    --control-size: 70px;
   }
 }
 
