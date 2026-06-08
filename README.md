@@ -13,8 +13,8 @@ https://egofree71.github.io/EssentialBreathingWeb/
 It can be used directly in a browser, without creating an account or installing anything.
 
 <p align="center">
-  <img src="assets/screenshots/main-screen.png" alt="Essential Breathing main screen with breathing gauge" width="280">
-  <img src="assets/screenshots/settings-screen.png" alt="Essential Breathing settings screen" width="420">
+  <img src="assets/screenshots/main-screen.jpg" alt="Essential Breathing main screen with breathing gauge" width="280">
+  <img src="assets/screenshots/settings-screen.jpg" alt="Essential Breathing settings screen" width="420">
 </p>
 
 ## Features
