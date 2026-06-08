@@ -22,12 +22,15 @@ https://egofree71.github.io/EssentialBreathingWeb/
 - Automatic language selection: English, French or Spanish
 - Settings saved locally in the browser
 - Mobile-friendly portrait layout
+- Installable Progressive Web App
+- Offline support after the first successful online load
+- Standalone display mode when launched from the home screen
 
 ## Run locally
 
-Open `index.html` directly in a browser.
+For a normal browser test, open `index.html` directly in a browser.
 
-For a slightly more realistic local test, you can also serve the folder with a small HTTP server:
+For a realistic PWA test, serve the folder with a small HTTP server:
 
 ```bash
 python -m http.server 8000
@@ -38,6 +41,19 @@ Then open:
 ```text
 http://localhost:8000
 ```
+
+The service worker requires HTTPS or `localhost`, so it will not register from a `file://` URL.
+
+## PWA notes
+
+The PWA uses:
+
+- `manifest.webmanifest` for install metadata, icons, portrait orientation and standalone display;
+- `service-worker.js` to cache the application shell for offline use.
+
+On Android, install the app from the browser menu. When launched from the home screen, it should open without the browser address bar and browser navigation controls. The Android system navigation bar can still remain visible, depending on the device and browser.
+
+When files are changed, the service worker cache version in `service-worker.js` may need to be updated so installed copies refresh cleanly.
 
 ## Notes
 

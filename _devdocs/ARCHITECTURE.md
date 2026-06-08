@@ -20,6 +20,10 @@ The project is intentionally kept very simple: no framework, no build step, and 
 index.html
 style.css
 app.js
+manifest.webmanifest
+service-worker.js
+assets/icons/icon-192.png
+assets/icons/icon-512.png
 README.md
 ```
 
@@ -59,9 +63,33 @@ Contains all application logic:
 - themes;
 - simple translation system;
 - persistence through `localStorage`;
-- wake lock attempt during a session.
+- wake lock attempt during a session;
+- service worker registration.
 
 The code is wrapped in an immediately invoked function expression to avoid creating global variables.
+
+### `manifest.webmanifest`
+
+Defines the installable PWA metadata:
+
+- application name;
+- start URL and scope;
+- portrait orientation;
+- standalone display mode;
+- theme and background colors;
+- application icons.
+
+The app uses `display: standalone` rather than `display: fullscreen`. This removes the browser address bar and browser navigation controls when the app is launched from the home screen, while avoiding a more aggressive immersive mode.
+
+### `service-worker.js`
+
+Pre-caches the small application shell so the app can open offline after the first successful online visit.
+
+The service worker uses a versioned cache name. When cached files change, update the cache version so browsers install a fresh cache.
+
+### `assets/icons/`
+
+Contains PNG icons required by installable PWAs. The icons are deliberately simple and match the visual identity of the breathing gauge.
 
 ## State machine
 
@@ -138,6 +166,26 @@ The application tries to use the `navigator.wakeLock` API during a session to ke
 
 This API is not available everywhere and often requires HTTPS. If it fails, the application simply continues to work without wake lock.
 
+## PWA and offline behavior
+
+The app is installable as a Progressive Web App because it provides a Web App Manifest and registers a service worker.
+
+The manifest uses `display: standalone`, which is the best match for the desired mobile behavior: the installed app opens without the browser address bar or browser navigation UI. Android system UI may still be visible depending on the browser and device.
+
+The service worker caches the application shell:
+
+```text
+./
+./index.html
+./style.css
+./app.js
+./manifest.webmanifest
+./assets/icons/icon-192.png
+./assets/icons/icon-512.png
+```
+
+This makes offline startup deterministic after the first online load. Normal browser HTTP cache may sometimes allow a page to reload offline, but that behavior is not reliable enough to be considered real offline support.
+
 ## Technical choices
 
 ### Why not Godot Web export?
@@ -154,8 +202,7 @@ The gauge is a simple vector drawing that is easy to control. SVG avoids Canvas,
 
 ## Possible future improvements
 
-- add fullscreen mode;
-- add PWA installation;
+- optionally experiment with `display: fullscreen` if a more immersive installed mode is desired;
 - add subtle sound or vibration feedback;
 - add more languages;
 - split `app.js` into several modules if the file becomes too large;

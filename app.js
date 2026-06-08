@@ -180,6 +180,7 @@
     updateSettingsScreen();
     resetSession();
     bindEvents();
+    registerServiceWorker();
   }
 
   /**
@@ -615,6 +616,22 @@
     }
 
     return "en";
+  }
+
+  /**
+   * Registers the service worker that turns the page into a small offline PWA.
+   * Registration is skipped automatically on unsupported browsers or file:// URLs.
+   */
+  function registerServiceWorker() {
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+        console.warn("Service worker registration failed.", error);
+      });
+    });
   }
 
   /**
