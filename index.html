@@ -17,6 +17,53 @@
 </head>
 <body>
   <main class="app" aria-live="polite">
+    <section id="intro-screen" class="screen intro-screen" hidden>
+      <div class="intro-card">
+        <div class="intro-logo" aria-hidden="true">
+          <svg viewBox="0 0 80 80" focusable="false">
+            <rect x="28" y="8" width="24" height="64" rx="12" ry="12"></rect>
+            <circle cx="40" cy="54" r="12"></circle>
+          </svg>
+        </div>
+
+        <h1 id="intro-title">Essential Breathing</h1>
+        <p id="intro-subtitle" class="intro-subtitle">A simple breathing guide.</p>
+
+        <div class="intro-instructions">
+          <p>
+            <span id="intro-play-prefix">Tap</span>
+            <span class="intro-inline-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false">
+                <path d="M19 12 L54 32 L19 52 Z"></path>
+              </svg>
+            </span>
+            <span id="intro-play-suffix">to start or resume.</span>
+          </p>
+          <p id="intro-pause-screen">Tap the breathing screen to pause.</p>
+          <p>
+            <span id="intro-stop-prefix">When paused, use</span>
+            <span class="intro-inline-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false">
+                <rect x="15" y="15" width="34" height="34" rx="4"></rect>
+              </svg>
+            </span>
+            <span id="intro-stop-suffix">to stop the session.</span>
+          </p>
+          <p>
+            <span id="intro-settings-prefix">Use</span>
+            <span class="intro-inline-icon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" focusable="false">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17C2.797 1.394 1.394 2.797 2.092 4.08l.17.31a1.464 1.464 0 0 1-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1c.895.264 1.318 1.285.872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.17a1.464 1.464 0 0 1 2.105.873l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.169c1.283.699 2.686-.704 1.987-1.987l-.169-.31a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.169-.31c.699-1.283-.704-2.686-1.987-1.987l-.31.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34ZM8 10.9a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8Z"></path>
+              </svg>
+            </span>
+            <span id="intro-settings-suffix">to adjust rhythm, duration and theme.</span>
+          </p>
+        </div>
+
+        <button id="intro-start-button" class="intro-start-button" type="button">Start</button>
+      </div>
+    </section>
+
     <section id="main-screen" class="screen main-screen">
       <button id="settings-button" class="icon-button settings-button" type="button" aria-label="Settings">
         <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">

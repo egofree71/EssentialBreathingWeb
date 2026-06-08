@@ -56,6 +56,130 @@ button {
   display: none !important;
 }
 
+
+.intro-screen {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: calc(28px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+.intro-screen::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at 50% 15%, rgb(255 255 255 / 0.14), transparent 46%);
+  pointer-events: none;
+}
+
+.intro-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 430px);
+  padding: clamp(28px, 7vw, 42px) clamp(22px, 6vw, 34px);
+  border: 1px solid var(--button-border);
+  border-radius: 32px;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.18);
+  text-align: center;
+}
+
+.intro-logo {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 22px;
+  border: 1px solid var(--button-border);
+  border-radius: 26px;
+  background: var(--button-fill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-logo svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.96;
+}
+
+.intro-logo rect {
+  fill: var(--gauge-color);
+}
+
+.intro-logo circle {
+  fill: var(--ball-color);
+}
+
+.intro-card h1 {
+  margin: 0;
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.intro-subtitle {
+  margin: 14px 0 0;
+  font-size: clamp(1.08rem, 4.6vw, 1.25rem);
+  opacity: 0.88;
+}
+
+.intro-instructions {
+  display: grid;
+  gap: 14px;
+  margin: 30px 0 32px;
+  text-align: left;
+  font-size: clamp(1rem, 4.2vw, 1.12rem);
+  line-height: 1.42;
+}
+
+.intro-instructions p {
+  margin: 0;
+}
+
+.intro-inline-icon {
+  width: 34px;
+  height: 34px;
+  margin: 0 0.18em;
+  border: 1px solid var(--button-border);
+  border-radius: 12px;
+  background: var(--button-fill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  transform: translateY(-0.08em);
+}
+
+.intro-inline-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.intro-start-button {
+  width: min(100%, 260px);
+  min-height: 54px;
+  border: 1px solid var(--button-border);
+  border-radius: 18px;
+  background: var(--button-fill);
+  color: var(--text-color);
+  box-shadow: 0 12px 34px rgb(0 0 0 / 0.16);
+  font-size: 1.08rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.intro-start-button:active {
+  transform: scale(0.97);
+  background: var(--button-active);
+}
+
 .main-screen {
   position: relative;
   display: grid;

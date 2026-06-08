@@ -31,6 +31,7 @@ README.md
 
 Contains the interface structure:
 
+- first-run introduction screen;
 - main screen;
 - SVG breathing gauge;
 - start, pause, resume and stop buttons;
@@ -56,6 +57,7 @@ Theme colors are exposed by `app.js` as CSS variables.
 
 Contains all application logic:
 
+- first-run introduction state;
 - session state;
 - breathing animation;
 - pause and resume handling;
@@ -133,7 +135,19 @@ Settings are saved in `localStorage` with the following key:
 essentialBreathingWeb.settings.v1
 ```
 
-Loaded values are always normalized to avoid errors if local storage contains invalid or older data.
+The first-run introduction is also stored locally, with a separate key:
+
+```text
+essentialBreathingWeb.introSeen.v1
+```
+
+Loaded settings values are always normalized to avoid errors if local storage contains invalid or older data.
+
+## First-run introduction
+
+The app shows a short introduction only the first time it is opened in a browser. It explains the main controls without adding a permanent onboarding flow.
+
+The introduction text is translated with the same built-in dictionary as the rest of the interface. The play, stop and settings references are shown with inline SVG icons instead of text labels, so the explanation matches the actual controls.
 
 ## Internationalization
 

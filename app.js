@@ -11,6 +11,7 @@
 
   // Saved preferences are versioned so future incompatible formats can use a new key.
   const STORAGE_KEY = "essentialBreathingWeb.settings.v1";
+  const INTRO_STORAGE_KEY = "essentialBreathingWeb.introSeen.v1";
 
   // User-adjustable breathing durations, expressed in seconds.
   const DURATION_STEP = 0.5;
@@ -79,6 +80,16 @@
   const translations = {
     en: {
       SETTINGS_TITLE: "Settings",
+      INTRO_TITLE: "Essential Breathing",
+      INTRO_SUBTITLE: "A simple breathing guide.",
+      INTRO_PLAY_PREFIX: "Tap",
+      INTRO_PLAY_SUFFIX: "to start or resume.",
+      INTRO_PAUSE_SCREEN: "Tap the breathing screen to pause.",
+      INTRO_STOP_PREFIX: "When paused, use",
+      INTRO_STOP_SUFFIX: "to stop the session.",
+      INTRO_SETTINGS_PREFIX: "Use",
+      INTRO_SETTINGS_SUFFIX: "to adjust rhythm, duration and theme.",
+      INTRO_START: "Start",
       BREATHING_SECTION: "Breathing",
       INHALE: "Inhale",
       EXHALE: "Exhale",
@@ -93,6 +104,16 @@
     },
     fr: {
       SETTINGS_TITLE: "Réglages",
+      INTRO_TITLE: "Essential Breathing",
+      INTRO_SUBTITLE: "Un guide de respiration simple.",
+      INTRO_PLAY_PREFIX: "Touchez",
+      INTRO_PLAY_SUFFIX: "pour commencer ou reprendre.",
+      INTRO_PAUSE_SCREEN: "Touchez l’écran de respiration pour mettre en pause.",
+      INTRO_STOP_PREFIX: "En pause, utilisez",
+      INTRO_STOP_SUFFIX: "pour arrêter la session.",
+      INTRO_SETTINGS_PREFIX: "Utilisez",
+      INTRO_SETTINGS_SUFFIX: "pour régler le rythme, la durée et le thème.",
+      INTRO_START: "Commencer",
       BREATHING_SECTION: "Respiration",
       INHALE: "Inspiration",
       EXHALE: "Expiration",
@@ -107,6 +128,16 @@
     },
     es: {
       SETTINGS_TITLE: "Ajustes",
+      INTRO_TITLE: "Essential Breathing",
+      INTRO_SUBTITLE: "Una guía de respiración simple.",
+      INTRO_PLAY_PREFIX: "Toca",
+      INTRO_PLAY_SUFFIX: "para empezar o reanudar.",
+      INTRO_PAUSE_SCREEN: "Toca la pantalla de respiración para pausar.",
+      INTRO_STOP_PREFIX: "En pausa, usa",
+      INTRO_STOP_SUFFIX: "para detener la sesión.",
+      INTRO_SETTINGS_PREFIX: "Usa",
+      INTRO_SETTINGS_SUFFIX: "para ajustar el ritmo, la duración y el tema.",
+      INTRO_START: "Empezar",
       BREATHING_SECTION: "Respiración",
       INHALE: "Inspiración",
       EXHALE: "Exhalación",
@@ -123,8 +154,19 @@
 
   // Cache all DOM nodes once. If an id changes in index.html, it should be updated here too.
   const elements = {
+    introScreen: document.querySelector("#intro-screen"),
     mainScreen: document.querySelector("#main-screen"),
     settingsScreen: document.querySelector("#settings-screen"),
+    introTitle: document.querySelector("#intro-title"),
+    introSubtitle: document.querySelector("#intro-subtitle"),
+    introPlayPrefix: document.querySelector("#intro-play-prefix"),
+    introPlaySuffix: document.querySelector("#intro-play-suffix"),
+    introPauseScreen: document.querySelector("#intro-pause-screen"),
+    introStopPrefix: document.querySelector("#intro-stop-prefix"),
+    introStopSuffix: document.querySelector("#intro-stop-suffix"),
+    introSettingsPrefix: document.querySelector("#intro-settings-prefix"),
+    introSettingsSuffix: document.querySelector("#intro-settings-suffix"),
+    introStartButton: document.querySelector("#intro-start-button"),
     settingsButton: document.querySelector("#settings-button"),
     backButton: document.querySelector("#back-button"),
     startButton: document.querySelector("#start-button"),
@@ -180,6 +222,7 @@
     updateSettingsScreen();
     resetSession();
     bindEvents();
+    showIntroScreenIfNeeded();
     registerServiceWorker();
   }
 
@@ -187,6 +230,7 @@
    * Connects UI controls to the small state machine and settings model.
    */
   function bindEvents() {
+    elements.introStartButton.addEventListener("click", dismissIntroScreen);
     elements.settingsButton.addEventListener("click", showSettingsScreen);
     elements.backButton.addEventListener("click", showMainScreen);
     elements.startButton.addEventListener("click", startOrResumeSession);
@@ -394,6 +438,48 @@
     elements.sessionProgressFill.style.width = `${clampNumber(progressPercent, 0, 100)}%`;
   }
 
+
+  /**
+   * Shows a short help screen only once, so the daily flow remains direct.
+   */
+  function showIntroScreenIfNeeded() {
+    if (hasSeenIntro()) {
+      return;
+    }
+
+    elements.mainScreen.hidden = true;
+    elements.settingsScreen.hidden = true;
+    elements.introScreen.hidden = false;
+  }
+
+  /**
+   * Dismisses the first-run introduction and stores that choice locally.
+   */
+  function dismissIntroScreen() {
+    markIntroSeen();
+    elements.introScreen.hidden = true;
+    elements.settingsScreen.hidden = true;
+    elements.mainScreen.hidden = false;
+    applyTheme();
+    updateMainControls();
+  }
+
+  function hasSeenIntro() {
+    try {
+      return window.localStorage.getItem(INTRO_STORAGE_KEY) === "true";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function markIntroSeen() {
+    try {
+      window.localStorage.setItem(INTRO_STORAGE_KEY, "true");
+    } catch (error) {
+      // If localStorage is unavailable, the introduction may be shown again.
+    }
+  }
+
   /**
    * The settings screen is only meant to edit idle sessions.
    */
@@ -403,12 +489,14 @@
       resetSession();
     }
 
+    elements.introScreen.hidden = true;
     elements.mainScreen.hidden = true;
     elements.settingsScreen.hidden = false;
     updateSettingsScreen();
   }
 
   function showMainScreen() {
+    elements.introScreen.hidden = true;
     elements.settingsScreen.hidden = true;
     elements.mainScreen.hidden = false;
     applyTheme();
@@ -468,6 +556,17 @@
    */
   function applyLocalization() {
     document.documentElement.lang = language;
+
+    elements.introTitle.textContent = translate("INTRO_TITLE");
+    elements.introSubtitle.textContent = translate("INTRO_SUBTITLE");
+    elements.introPlayPrefix.textContent = translate("INTRO_PLAY_PREFIX");
+    elements.introPlaySuffix.textContent = translate("INTRO_PLAY_SUFFIX");
+    elements.introPauseScreen.textContent = translate("INTRO_PAUSE_SCREEN");
+    elements.introStopPrefix.textContent = translate("INTRO_STOP_PREFIX");
+    elements.introStopSuffix.textContent = translate("INTRO_STOP_SUFFIX");
+    elements.introSettingsPrefix.textContent = translate("INTRO_SETTINGS_PREFIX");
+    elements.introSettingsSuffix.textContent = translate("INTRO_SETTINGS_SUFFIX");
+    elements.introStartButton.textContent = translate("INTRO_START");
 
     elements.settingsButton.setAttribute("aria-label", translate("SETTINGS_TITLE"));
     elements.settingsTitle.textContent = translate("SETTINGS_TITLE");
