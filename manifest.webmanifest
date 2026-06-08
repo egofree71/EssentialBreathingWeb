@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Essential Breathing",
-  "short_name": "Breathing",
+  "short_name": "Essential Breathing",
   "description": "A lightweight breathing guide for calm, simple breathing sessions.",
   "start_url": "./",
   "scope": "./",
@@ -9,7 +9,10 @@
   "orientation": "portrait",
   "background_color": "#00122e",
   "theme_color": "#00122e",
-  "categories": ["health", "lifestyle"],
+  "categories": [
+    "health",
+    "lifestyle"
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
