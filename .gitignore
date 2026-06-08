@@ -1,0 +1,17 @@
+# JetBrains IDEs
+.idea/
+
+# VS Code local settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependencies / build output, useful if the project later uses npm
+node_modules/
+dist/
+build/
