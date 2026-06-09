@@ -5,7 +5,7 @@
  * without a network connection after the first successful online visit.
  */
 
-const CACHE_VERSION = "v1.0.4";
+const CACHE_VERSION = "v1.0.5";
 const CACHE_NAME = `essential-breathing-web-${CACHE_VERSION}`;
 
 const APP_SHELL_FILES = [

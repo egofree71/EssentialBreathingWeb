@@ -238,7 +238,7 @@ button {
 
 .pause-progress-label {
   margin-bottom: 10px;
-  font-size: clamp(0.95rem, 3.8vw, 1.08rem);
+  font-size: clamp(1.35rem, 5vw, 1.5rem);
   letter-spacing: 0.02em;
 }
 
