@@ -412,7 +412,9 @@ button {
 }
 
 .setting-row label,
-.slider-header label {
+.slider-header label,
+.stepper output,
+.slider-header output {
   font-size: clamp(1rem, 4.2vw, 1.12rem);
 }
 
